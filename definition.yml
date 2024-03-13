@@ -1,0 +1,5 @@
+name: chat
+version: 0.1.0
+author: gynt
+dependencies: [ protocol >= 0.1.0 ]
+specification-version: 1.0.0
