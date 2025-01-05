@@ -110,7 +110,7 @@ local onChatMessage = function(chatMessage)
             handled = true
             local success, keepModalOpen, newMessage = pcall(handler, chatMessage)
 
-            log(2, string.format("Handled command: %s, %s, %s", success, keepModalOpen, newMessage))
+            log(2, string.format("Handled command: %s, %s, %s => %s", success, keepModalOpen, chatMessage, newMessage))
 
             if not success then
                 local msg = "[chat]: error in processing command: " .. tostring(chatMessage) .. "\nerror: " .. tostring(keepModalOpen)
@@ -191,6 +191,10 @@ namespace = {
       error("Failed to register chat handler. Chat handler already registered for header: " .. tostring(chatHeader))
     end
 
+    if handler == nil or type(handler) ~= "function" then
+      error("Failed to register chat handler. Chat handler must be a function, received: " .. tostring(type(handler)))
+    end
+
     ChatHandlers[chatHeader] = handler
 
     log(1, "Chat handler registered for header: " .. tostring(chatHeader))
@@ -217,7 +221,7 @@ namespace = {
       end
     end
 
-    modules.protocol:queueCommand(0xE)
+    modules.protocol:invokeProtocol(0xE)
     clearCurrentText()
   end,
 }
