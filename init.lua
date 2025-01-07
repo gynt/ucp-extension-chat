@@ -124,7 +124,14 @@ local onChatMessage = function(chatMessage)
             else
                 if newMessage ~= nil then
    --               core.writeBytes(RECEIVED_CHAT_MESSAGE_ADDRESS, convertStringToNullTerminatedBytes(newMessage)) -- DAT_ReceivedChatMessage
-                  fireChatEvent(newMessage, 0, 0)   
+                  if type(newMessage) == "table" then
+                    for k, m in ipairs(newMessage) do
+                      fireChatEvent(m, 0, 0)   
+                    end
+                  else
+                    fireChatEvent(newMessage, 0, 0)   
+                  end
+                  
                 end
                 if not keepModalOpen then
                   closeModalDialog() -- close the chat modal
