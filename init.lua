@@ -110,7 +110,7 @@ local onChatMessage = function(chatMessage)
             handled = true
             local success, keepModalOpen, newMessage = pcall(handler, chatMessage)
 
-            log(2, string.format("Handled command: %s, %s, %s => %s", success, keepModalOpen, chatMessage, newMessage))
+            log(2, string.format("Handled chat message: %s, %s, %s => %s", success, keepModalOpen, chatMessage, newMessage))
 
             if not success then
                 local msg = "[chat]: error in processing command: " .. tostring(chatMessage) .. "\nerror: " .. tostring(keepModalOpen)
@@ -126,9 +126,11 @@ local onChatMessage = function(chatMessage)
    --               core.writeBytes(RECEIVED_CHAT_MESSAGE_ADDRESS, convertStringToNullTerminatedBytes(newMessage)) -- DAT_ReceivedChatMessage
                   if type(newMessage) == "table" then
                     for k, m in ipairs(newMessage) do
+                      log(2, string.format("fire chat event: %s", m))
                       fireChatEvent(m, 0, 0)   
                     end
                   else
+                    log(2, string.format("fire chat event: %s", newMessage))
                     fireChatEvent(newMessage, 0, 0)   
                   end
                   
